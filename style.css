@@ -71,3 +71,42 @@ nav {
 .import-tool:hover {
     background-color: #b4b4b4;
 }
+.timeline{
+    display: flex;
+    flex-direction: row;
+}
+.note{
+    background-color: #d8d8d8;
+    width: 5vw;
+    list-style-type: none;
+    padding: 0.25vh 0.25vw;
+    text-align: center;
+    padding-bottom: 0.5vh;
+}
+.note-attribute{
+    width: 4vw;
+    height: 4vh;
+}
+.note-name-button{
+    display: inline-block;
+    background-color: #d8d8d8;
+    width: 3vw;
+    height: 4vh;
+    padding: 0;
+    border-radius: 2vh;
+    border-width: 0;
+}
+.note-name-button:hover{
+    background-color: #b4b4b4;
+}
+#octave{
+    width: 3vw;
+}
+#note-tools{
+    display: none;
+}
+.note-tool{
+    height: 3vh;
+    padding-top: 1vh;
+    padding-left: 0.5vw;
+}
