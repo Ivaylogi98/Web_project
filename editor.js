@@ -20,29 +20,25 @@ async function fetchData(url, dataToSend) {
     }
 }
 
-async function importFile(event) {
+async function importFile() {
 
     const files = document.querySelector('[type=file]').files;
     var file = files[0];
-    
+
     console.log("importing " + file.name);
     let url = "midi-parser.php";
     const dataToSend = new FormData();
     dataToSend.append('file', file);
     var content = await fetchData(url, dataToSend);
-    document.getElementById("timeline").innerHTML = content;
+    //document.getElementById("timeline").innerHTML = content;
     song = content;
     console.log(song);
     console.log("imported " + file.name);
 
+    showSong();
+
     loadTimeline(song);
 }
-
-function displayContents(contents) {
-    var element = document.getElementById('timeline');
-    element.innerHTML = contents;
-}
-
 
 function exportFile(content) {
     var filename = "foo.txt";
@@ -65,21 +61,36 @@ function exportFile(content) {
     console.log("exporting " + filename);
 }
 
-function addTrack(){
+function displaySongTimeline() {
+    for (let i = 0; i < numberOfTracks; i++) {
+        addTrack();
+        //add note events
+    }
+}
 
-    var track = document.createElement("section");
-    track.setAttribute("id", "track" + (numberOfTracks + 1));
-    track.setAttribute("class", "tracks");
+function addTrack() {
+    var track = document.createElement("li");
+    track.setAttribute("id", "track" + (++numberOfTracks));
+    track.setAttribute("class", "track");
+
+    var trackHeader = document.createElement("div");
+    trackHeader.innerHTML = "track" + numberOfTracks;
+    trackHeader.style.paddingTop = "5.5vh";
+    trackHeader.style.marginLeft = "0.5vw";
+    track.appendChild(trackHeader);
+
     document.getElementById("timeline").appendChild(track);
 }
 
-function addNote(noteTextName){
-    console.log("adding note:" + note);
+function addNote(noteTextName) {
+
+    console.log("adding note:" + noteTextName);
     var note = document.createElement("li");
     note.setAttribute("class", "note");
 
-    var noteName = document.createTextNode(noteTextName);
-    noteName.innerHTML = "Choose note";
+    var noteName = document.createElement("div");
+    noteName.setAttribute("class", "note-name");
+    noteName.innerHTML = noteTextName;
     note.appendChild(noteName);
 
     var noteStart = document.createElement("input");
@@ -94,14 +105,41 @@ function addNote(noteTextName){
 
     document.getElementById("track" + chosenTrack).appendChild(note);
 }
-function showNotes(){
+function showNotes() {
     var x = document.getElementById("note-tools");
     if (x.style.display === "flex") {
-      x.style.display = "none";
+        x.style.display = "none";
     } else {
-      x.style.display = "flex";
+        x.style.display = "flex";
     }
 }
-function changeOctave(){
+function changeOctave() {
     chosenOctave = document.getElementById("octave").value;
+}
+
+function pickTrack() {
+    var pickTrack = document.querySelectorAll("[name=pickInterest"),
+        parentInterest = document.getElementById("pickInterests");
+    for (var index = 0; index < pickTrack.length; index++) {
+        var cb = pickTrack[index];
+        cb.addEventListener("change", function (evt) {
+            var checked = 0;
+            for (var j = 0; j < pickTrack.length; j++) {
+                if (pickTrack[j].checked) {
+                    checked++;
+                } 
+            }
+            switch (checked) {
+                case 0: parentInterest.checked = false;
+                    parentInterest.indeterminate = false;
+                    break;
+                case 1: parentInterest.checked = false;
+                    parentInterest.indeterminate = true;
+                    break;
+                default: parentInterest.checked = true;
+                    parentInterest.indeterminate = false;
+                    break;
+            }
+        });
+    }
 }

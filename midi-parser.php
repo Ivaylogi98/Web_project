@@ -306,10 +306,6 @@ function readVarLen($str,&$pos){
 function error($str){
     echo "Error: ".$str;
     exit();
-    if ((int)phpversion()>=5)
-	eval('throw new Exception($str);'); // throws php5-exceptions. the main script can deal with these errors.
-	else
-    die('>>> '.$str.'!');
 }
 
 $midi = new Midi;

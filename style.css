@@ -73,6 +73,14 @@ nav {
 }
 .timeline{
     display: flex;
+    flex-direction: column;
+}
+.track{
+    height: 14vh;
+    border-color: #b4b4b4;
+    border-width: 1px;
+    background-color: #d8d8d8;
+    display: flex;
     flex-direction: row;
 }
 .note{
@@ -109,4 +117,7 @@ nav {
     height: 3vh;
     padding-top: 1vh;
     padding-left: 0.5vw;
+}
+.note-name{
+    font-size: 1.5em;
 }
