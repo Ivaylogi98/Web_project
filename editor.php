@@ -6,14 +6,14 @@ require("./header.php");
 
 <div class="tools">
     <button class="tool" id="add-track" onclick="addTrack()">Add track</button>
-    <button class="tool" id="add-note" onclick="showNotes()">Show notes</button>
+    <button class="tool" id="add-note" onclick="showAddNoteButtons()">Show notes</button>
     <label for="import" class="import-tool">Import</label>
     <input type="file" id="import"></input>
     <button type="button" class="tool" id="export">Export</button>
 </div>
 <div class="tools" id="note-tools">
     <label for="octave" class="note-tool">Octave:</label>
-    <input type="number" id="octave" min=0 max=7 value="1">
+    <input type="number" id="octave" min=0 max=7 value="1" oninput="changeOctave()">
     <label class="note-tool">Add:</label>
     <button class="note-name-button" id="add-track" onclick="addNote('c')">C</button>
     <button class="note-name-button" id="add-track" onclick="addNote('c_')">C#</button>

@@ -71,12 +71,12 @@ nav {
 .import-tool:hover {
     background-color: #b4b4b4;
 }
-.timeline{
+#timeline{
     display: flex;
     flex-direction: column;
 }
 .track{
-    height: 14vh;
+    height: 15vh;
     border-color: #b4b4b4;
     border-width: 1px;
     background-color: #d8d8d8;
@@ -120,4 +120,8 @@ nav {
 }
 .note-name{
     font-size: 1.5em;
+}
+.delete-button{
+    width: 4.4vw;
+    height: 2vh;
 }

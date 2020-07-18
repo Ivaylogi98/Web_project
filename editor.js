@@ -1,7 +1,6 @@
 
 document.getElementById("import").addEventListener("change", importFile);
 document.getElementById("export").addEventListener("click", exportFile);
-document.getElementById("octave").addEventListener("change", changeOctave());
 
 var song;
 var numberOfTracks = 0;
@@ -73,24 +72,36 @@ function addTrack() {
     track.setAttribute("id", "track" + (++numberOfTracks));
     track.setAttribute("class", "track");
 
-    var trackHeader = document.createElement("div");
+    var trackCheckBox = document.createElement("input");
+    trackCheckBox.setAttribute("type", "radio");
+    trackCheckBox.setAttribute("id", "radio-track" + numberOfTracks);
+    trackCheckBox.setAttribute("value", numberOfTracks);
+    trackCheckBox.setAttribute("name", "tracks");
+    trackCheckBox.style.marginTop = "6vh";
+    track.appendChild(trackCheckBox);
+
+    var trackHeader = document.createElement("label");
+    trackHeader.setAttribute("for", "track" + numberOfTracks);
     trackHeader.innerHTML = "track" + numberOfTracks;
     trackHeader.style.paddingTop = "5.5vh";
     trackHeader.style.marginLeft = "0.5vw";
     track.appendChild(trackHeader);
 
     document.getElementById("timeline").appendChild(track);
+    document.getElementById("radio-track" + numberOfTracks).addEventListener("click", function(e){
+        chosenTrack = e.currentTarget.value;
+    });
 }
 
 function addNote(noteTextName) {
 
-    console.log("adding note:" + noteTextName);
+    console.log("adding note:" + noteTextName + chosenOctave);
     var note = document.createElement("li");
     note.setAttribute("class", "note");
 
     var noteName = document.createElement("div");
     noteName.setAttribute("class", "note-name");
-    noteName.innerHTML = noteTextName;
+    noteName.innerHTML = noteTextName + chosenOctave;
     note.appendChild(noteName);
 
     var noteStart = document.createElement("input");
@@ -103,9 +114,18 @@ function addNote(noteTextName) {
     noteEnd.setAttribute("class", "note-attribute");
     note.appendChild(noteEnd);
 
+    var noteDelete = document.createElement("button");
+    noteDelete.setAttribute("class", "delete-button");
+    noteDelete.innerHTML = "X";
+    noteDelete.onclick = function(){
+        noteDelete.parentElement.remove()
+        return;
+    };
+    note.appendChild(noteDelete);
+
     document.getElementById("track" + chosenTrack).appendChild(note);
 }
-function showNotes() {
+function showAddNoteButtons() {
     var x = document.getElementById("note-tools");
     if (x.style.display === "flex") {
         x.style.display = "none";
@@ -114,12 +134,13 @@ function showNotes() {
     }
 }
 function changeOctave() {
+    console.log(document.getElementById("octave").value);
     chosenOctave = document.getElementById("octave").value;
 }
 
 function pickTrack() {
-    var pickTrack = document.querySelectorAll("[name=pickInterest"),
-        parentInterest = document.getElementById("pickInterests");
+    var pickTrack = document.querySelectorAll("[name=pickTrack"),
+        parentTrack = document.getElementById("pickTrack");
     for (var index = 0; index < pickTrack.length; index++) {
         var cb = pickTrack[index];
         cb.addEventListener("change", function (evt) {
@@ -130,14 +151,17 @@ function pickTrack() {
                 } 
             }
             switch (checked) {
-                case 0: parentInterest.checked = false;
-                    parentInterest.indeterminate = false;
+                case 0:
+                    parentTrack.checked = false;
+                    parentTrack.indeterminate = false;
                     break;
-                case 1: parentInterest.checked = false;
-                    parentInterest.indeterminate = true;
+                case 1:
+                    parentTrack.checked = false;
+                    parentTrack.indeterminate = true;
                     break;
-                default: parentInterest.checked = true;
-                    parentInterest.indeterminate = false;
+                default:
+                    parentTrack.checked = true;
+                    parentTrack.indeterminate = false;
                     break;
             }
         });
