@@ -54,11 +54,10 @@ function loadTimeline(song) {
     numberOfTracks = 0;
     document.getElementById("timeline").innerHTML = "";
 
-    console.log(song);
-    for (track of song) {
+    for (track of Object.values(song)) {
         addTrack();
-        console.log(Object.values(track)[0]);
-        for (note of Object.values(track)[0]) {
+        console.log(Object.values(track));
+        for (note of Object.values(track)) {
             addNote(note.note, note.start, note.end);
         }
 
@@ -83,7 +82,6 @@ function getSong() {
         }
         songJSON["track" + (trackNumber++)] = trackJSON;
     }
-    //console.log(songJSON);
     return songJSON;
 
 }

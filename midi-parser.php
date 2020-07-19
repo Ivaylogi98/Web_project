@@ -26,6 +26,9 @@ $binary = fread($fp, $filesize);
 // finally close the file
 fclose($fp);
 
+class song{
+}
+
 class Midi{
 
     var $tracks;
@@ -264,7 +267,8 @@ class Midi{
     }
 
     function midi2json(){
-        $song = array();
+        //$song = array();
+        $song = new song();
         $track_num = 1;
         foreach($this->tracks as $track){
             $json_track = array();
@@ -291,7 +295,9 @@ class Midi{
                 }
             }
             if(count($json_track) > 0){
-                array_push($song, array("track".$track_num => $json_track));
+                //array_push($song, array("track".$track_num => $json_track));
+                $track_name = "track".$track_num;
+                $song->$track_name = $json_track;
                 $track_num++;
             }
         }
