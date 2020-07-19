@@ -2,7 +2,6 @@
 document.getElementById("import").addEventListener("change", importFile);
 document.getElementById("export").addEventListener("click", exportFile);
 
-var song;
 var numberOfTracks = 0;
 var chosenTrack = 1;
 var chosenOctave = 1;
@@ -24,7 +23,6 @@ async function importFile() {
     const files = document.querySelector('[type=file]').files;
     var file = files[0];
 
-    console.log("importing " + file.name);
     let url = "midi-parser.php";
     const dataToSend = new FormData();
     dataToSend.append('file', file);
@@ -34,37 +32,60 @@ async function importFile() {
     console.log(song);
     console.log("imported " + file.name);
 
-    showSong();
-
     loadTimeline(song);
 }
 
 function exportFile(content) {
-    var filename = "foo.txt";
+    var filename = "song.json";
 
-    var content = document.getElementById("timeline").innerHTML;
+    var content = getSong();
+    console.log(content);
 
-    var pom = document.createElement('a');
-    pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-    pom.setAttribute('download', filename);
+    var a = document.createElement('a');
+    var file = new Blob([JSON.stringify(content)], {type: 'text/plain'});
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
+    a.click();
 
-    if (document.createEvent) {
-        var event = document.createEvent('MouseEvents');
-        event.initEvent('click', true, true);
-        pom.dispatchEvent(event);
-    }
-    else {
-        pom.click();
-    }
-
-    console.log("exporting " + filename);
+    console.log("exported " + filename);
 }
 
-function displaySongTimeline() {
-    for (let i = 0; i < numberOfTracks; i++) {
+function loadTimeline(song) {
+    numberOfTracks = 0;
+    document.getElementById("timeline").innerHTML = "";
+
+    console.log(song);
+    for (track of song) {
         addTrack();
-        //add note events
+        console.log(Object.values(track)[0]);
+        for (note of Object.values(track)[0]) {
+            addNote(note.note, note.start, note.end);
+        }
+
     }
+}
+
+function getSong() {
+    var songHTML = document.getElementById("timeline").childNodes;
+    var trackNumber = 1;
+    var songJSON = {};
+    for (trackHTML of songHTML) {
+        var trackJSON = [];
+        for (let i = 3; i < trackHTML.childNodes.length; i++) {
+            let noteHTML = trackHTML.childNodes[i];
+            console.log(trackHTML.childNodes[i]);
+            var noteJSON = {
+                note: noteHTML.childNodes[0].innerHTML,
+                start: noteHTML.childNodes[1].value,
+                end: noteHTML.childNodes[2].value,
+            }
+            trackJSON.push(noteJSON);
+        }
+        songJSON["track" + (trackNumber++)] = trackJSON;
+    }
+    //console.log(songJSON);
+    return songJSON;
+
 }
 
 function addTrack() {
@@ -80,6 +101,15 @@ function addTrack() {
     trackCheckBox.style.marginTop = "6vh";
     track.appendChild(trackCheckBox);
 
+    var trackDelete = document.createElement("button");
+    trackDelete.setAttribute("class", "delete-track-button");
+    trackDelete.innerHTML = "X";
+    trackDelete.onclick = function () {
+        trackDelete.parentElement.remove();
+        return;
+    };
+    track.appendChild(trackDelete);
+
     var trackHeader = document.createElement("label");
     trackHeader.setAttribute("for", "track" + numberOfTracks);
     trackHeader.innerHTML = "track" + numberOfTracks;
@@ -88,37 +118,43 @@ function addTrack() {
     track.appendChild(trackHeader);
 
     document.getElementById("timeline").appendChild(track);
-    document.getElementById("radio-track" + numberOfTracks).addEventListener("click", function(e){
+    document.getElementById("radio-track" + numberOfTracks).addEventListener("click", function (e) {
         chosenTrack = e.currentTarget.value;
     });
+    document.getElementById("radio-track" + numberOfTracks).checked = true;
+    chosenTrack = numberOfTracks;
 }
 
-function addNote(noteTextName) {
+function addNote(noteTextName, start = 0, end = 0) {
 
-    console.log("adding note:" + noteTextName + chosenOctave);
+    //console.log("adding note:" + noteTextName + chosenOctave);
     var note = document.createElement("li");
     note.setAttribute("class", "note");
 
     var noteName = document.createElement("div");
     noteName.setAttribute("class", "note-name");
-    noteName.innerHTML = noteTextName + chosenOctave;
+    var noteTextNameLastChar = noteTextName.slice(-1);
+    if (noteTextNameLastChar.slice(-1) >= 0 && noteTextNameLastChar <= 9) noteName.innerHTML = noteTextName;
+    else noteName.innerHTML = noteTextName + chosenOctave;
     note.appendChild(noteName);
 
     var noteStart = document.createElement("input");
     noteStart.setAttribute("type", "number");
     noteStart.setAttribute("class", "note-attribute");
+    noteStart.setAttribute("value", start);
     note.appendChild(noteStart);
 
     var noteEnd = document.createElement("input");
     noteEnd.setAttribute("type", "number");
     noteEnd.setAttribute("class", "note-attribute");
+    noteEnd.setAttribute("value", end);
     note.appendChild(noteEnd);
 
     var noteDelete = document.createElement("button");
-    noteDelete.setAttribute("class", "delete-button");
+    noteDelete.setAttribute("class", "delete-note-button");
     noteDelete.innerHTML = "X";
-    noteDelete.onclick = function(){
-        noteDelete.parentElement.remove()
+    noteDelete.onclick = function () {
+        noteDelete.parentElement.remove();
         return;
     };
     note.appendChild(noteDelete);
@@ -134,36 +170,6 @@ function showAddNoteButtons() {
     }
 }
 function changeOctave() {
-    console.log(document.getElementById("octave").value);
+    console.log("octave changed to: " + document.getElementById("octave").value);
     chosenOctave = document.getElementById("octave").value;
-}
-
-function pickTrack() {
-    var pickTrack = document.querySelectorAll("[name=pickTrack"),
-        parentTrack = document.getElementById("pickTrack");
-    for (var index = 0; index < pickTrack.length; index++) {
-        var cb = pickTrack[index];
-        cb.addEventListener("change", function (evt) {
-            var checked = 0;
-            for (var j = 0; j < pickTrack.length; j++) {
-                if (pickTrack[j].checked) {
-                    checked++;
-                } 
-            }
-            switch (checked) {
-                case 0:
-                    parentTrack.checked = false;
-                    parentTrack.indeterminate = false;
-                    break;
-                case 1:
-                    parentTrack.checked = false;
-                    parentTrack.indeterminate = true;
-                    break;
-                default:
-                    parentTrack.checked = true;
-                    parentTrack.indeterminate = false;
-                    break;
-            }
-        });
-    }
 }

@@ -8,6 +8,15 @@ if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
 } else {
     echo "Error uploading file!";
 }
+$ext = strtolower(pathinfo($uploadfile, PATHINFO_EXTENSION));
+if($ext == "json"){
+    $filesize = filesize($uploadfile);
+    $fp = fopen($uploadfile, 'r');
+    $json = fread($fp, $filesize);
+    fclose($fp);
+    echo $json;
+    exit();
+}
 
 $filesize = filesize($uploadfile);
 // open file for reading in binary mode
