@@ -5,13 +5,12 @@ nav {
     background-color: #f1f1f1;
     width: 50vw;
     height: 4vh;
-    margin: 2.5vh 25vw;
+    margin: 2.5vh auto;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     border-radius: 2vh;
 }
-
 .nav-button {
     display: inline-block;
     background-color: #d8d8d8;
