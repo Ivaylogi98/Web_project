@@ -227,7 +227,7 @@ class Midi{
                                     break;
         
                                 default:
-            // MM added: accept "unknown" Meta-Events
+                                    // MM added: accept "unknown" Meta-Events
                                     $metacode = sprintf("%02x", ord($binStr[$p+1]) );
                                     $p +=2;
                                     $len = readVarLen($binStr, $p);
@@ -319,7 +319,7 @@ function readVarLen($str,&$pos){
     return($value);
 }
 function error($str){
-    echo "Error: ".$str;
+    echo json_encode(array("error" => $str));
     exit();
 }
 

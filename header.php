@@ -14,4 +14,4 @@
         <a type="button" class="nav-button" href="./index.php">Guitar</a>
         <a type="button" class="nav-button" href="./editor.php">Editor</a>
     </nav>
-    <section>
+    <section class="content">

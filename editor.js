@@ -27,19 +27,21 @@ async function importFile() {
     const dataToSend = new FormData();
     dataToSend.append('file', file);
     var content = await fetchData(url, dataToSend);
-    //document.getElementById("timeline").innerHTML = content;
     song = content;
-    console.log(song);
+    //console.log(song);
     console.log("imported " + file.name);
 
-    loadTimeline(song);
+    if(Object.keys(song)[0] != "error")loadTimeline(song);
+    else{
+        alert("Error loading file: " + Object.values(song)[0]);
+    }
 }
 
 function exportFile(content) {
     var filename = "song.json";
 
     var content = getSong();
-    console.log(content);
+    //console.log(content);
 
     var a = document.createElement('a');
     var file = new Blob([JSON.stringify(content)], {type: 'text/plain'});
@@ -56,7 +58,7 @@ function loadTimeline(song) {
 
     for (track of Object.values(song)) {
         addTrack();
-        console.log(Object.values(track));
+        //console.log(Object.values(track));
         for (note of Object.values(track)) {
             addNote(note.note, note.start, note.end);
         }
@@ -72,7 +74,6 @@ function getSong() {
         var trackJSON = [];
         for (let i = 3; i < trackHTML.childNodes.length; i++) {
             let noteHTML = trackHTML.childNodes[i];
-            console.log(trackHTML.childNodes[i]);
             var noteJSON = {
                 note: noteHTML.childNodes[0].innerHTML,
                 start: noteHTML.childNodes[1].value,
@@ -125,7 +126,10 @@ function addTrack() {
 
 function addNote(noteTextName, start = 0, end = 0) {
 
-    //console.log("adding note:" + noteTextName + chosenOctave);
+    if(numberOfTracks == 0){
+        console.error("Can't add notes when there are no tracks!");
+        return;
+    }
     var note = document.createElement("li");
     note.setAttribute("class", "note");
 

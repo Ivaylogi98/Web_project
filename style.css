@@ -2,6 +2,8 @@ body{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 nav {
+    position: fixed;
+    left: 25vw;
     background-color: #f1f1f1;
     width: 50vw;
     height: 4vh;
@@ -28,6 +30,9 @@ nav {
 }
 
 .tools {
+    position: fixed;
+    top: 7vh;
+    left: 25vw;
     background-color: #f1f1f1;
     width: 50vw;
     display: flex;
@@ -47,9 +52,12 @@ nav {
     background-color: #b4b4b4;
 }
 #timeline {
+    display: flex;
+    flex-direction: column;
     width: 100vw;
     height: 20vh;
     margin: 5vh auto;
+    padding-inline-start: 0;
 }
 
 #import {
@@ -69,10 +77,6 @@ nav {
 }
 .import-tool:hover {
     background-color: #b4b4b4;
-}
-#timeline{
-    display: flex;
-    flex-direction: column;
 }
 .track{
     height: 15vh;
@@ -110,6 +114,9 @@ nav {
     width: 3vw;
 }
 #note-tools{
+    position: fixed;
+    top: 13vh;
+    left: 25vw;
     display: none;
 }
 .note-tool{
@@ -127,4 +134,8 @@ nav {
     margin-top: 5.5vh;
     width: 1.5vw;
     height: 2.2vh;
+}
+.content{
+    position: absolute;
+    top: 17vh;
 }
