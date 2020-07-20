@@ -1,5 +1,11 @@
 <?php
 
+header("Access-Control-Allow-Origin: *");
+
+if (!file_exists('uploads')) {
+    mkdir('uploads', 0777, true);
+}
+
 $uploaddir = 'uploads/';
 $uploadfile = $uploaddir . basename($_FILES['file']['name']);
 //upload file
