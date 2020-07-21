@@ -24,14 +24,6 @@ if($ext == "json"){
     exit();
 }
 
-$filesize = filesize($uploadfile);
-// open file for reading in binary mode
-$fp = fopen($uploadfile, 'rb');
-// read the entire file into a binary string
-$binary = fread($fp, $filesize);
-// finally close the file
-fclose($fp);
-
 class song{
 }
 
@@ -307,9 +299,6 @@ class Midi{
                 $track_num++;
             }
         }
-        $fp = fopen('example.json', 'w');
-        fwrite($fp, json_encode($song));
-        fclose($fp);
         echo json_encode($song);
     }
 
