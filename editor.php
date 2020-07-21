@@ -1,5 +1,5 @@
 <?php
-require("./header.php");
+require("./header.html");
 ?>
 
 <script async src="editor.js"></script>
@@ -31,5 +31,5 @@ require("./header.php");
 <ul id="timeline"></ul>
 
 <?php
-require("./footer.php");
+require("./footer.html");
 ?>

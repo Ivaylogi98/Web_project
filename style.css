@@ -139,3 +139,7 @@ nav {
     position: absolute;
     top: 17vh;
 }
+.about{
+    width: 100vw;
+    text-align: center;
+}
