@@ -28,7 +28,7 @@ async function importFile() {
     dataToSend.append('file', file);
     var content = await fetchData(url, dataToSend);
     song = content;
-    //console.log(song);
+    console.log(song);
     console.log("imported " + file.name);
 
     if(Object.keys(song)[0] != "error")loadTimeline(song);
